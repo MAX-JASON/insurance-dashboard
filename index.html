@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>保單分析儀表板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --gradient-bg: linear-gradient(135deg, #12c2e9 0%, #c471ed 50%, #f64f59 100%);
+            --chart-bg: rgba(255, 255, 255, 0.97);
+        }
+        body {
+            font-family: '微軟正黑體', sans-serif;
+            background: var(--gradient-bg);
+            margin: 0;
+            padding: 30px;
+            animation: gradientFlow 15s infinite alternate;
+        }
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            max-width: 1600px;
+            margin: auto;
+        }
+        .card {
+            background: var(--chart-bg);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .card:hover {
+            transform: translateY(-5px) rotate(1deg);
+        }
+        h2 {
+            color: #2d3436;
+            border-left: 5px solid #f64f59;
+            padding-left: 15px;
+            margin: 0 0 20px 0;
+            font-size: 1.8em;
+        }
+        .chart-caption {
+            padding: 15px;
+            margin-top: 20px;
+            background: rgba(246, 79, 89, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #f64f59;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- 核心保障雷达图 -->
+        <div class="card">
+            <h2>🛡️ 核心保障雷达图</h2>
+            <canvas id="radarChart"></canvas>
+            <div class="chart-caption">
+                <p>💡 <strong>保障升级一目了然！</strong><br>
+                新方案在医疗保障全面领先，<span style="color:#4cd137">美利康愛</span>癌症防护力爆表！<br>
+                旧保单就像基础盾牌，新方案简直是能量护罩！</p>
+            </div>
+        </div>
+
+        <!-- 财富增长曲线 -->
+        <div class="card">
+            <h2>🚀 财富增长曲线</h2>
+            <canvas id="growthCurve"></canvas>
+            <div class="chart-caption">
+                <p>💰 <strong>複利奇迹可视化！</strong><br>
+                <span style="color:#6c5ce7">美利雙寶</span>20年增值380%，<br>
+                旧保单增长就像骑自行车，新方案根本是坐火箭！</p>
+            </div>
+        </div>
+
+        <!-- 功能对比矩阵 -->
+        <div class="card">
+            <h2>🎯 功能对比矩阵</h2>
+            <canvas id="bubbleMatrix"></canvas>
+            <div class="chart-caption">
+                <p>⚡ <strong>攻防一体新选择！</strong><br>
+                <span style="color:#00a8ff">萬美利</span>双引擎驱动，<br>
+                资产传承+现金流就像涡轮增压组合拳！</p>
+            </div>
+        </div>
+
+        <!-- 星级战力榜 -->
+        <div class="card">
+            <h2>⭐ 星级战力榜</h2>
+            <canvas id="starChart"></canvas>
+            <div class="chart-caption">
+                <p>🏆 <strong>冠军方案诞生！</strong><br>
+                <span style="color:#fbc531">美利康愛</span>凭癌症防护拿下满分，<br>
+                就像买保险送金钟罩铁布衫！</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 核心保障雷达图
+        new Chart(document.getElementById('radarChart'), {
+            type: 'radar',
+            data: {
+                labels: ['医疗保障', '寿险保障', '配息收益', '资产传承', '税务优化'],
+                datasets: [
+                    {
+                        label: '添額增福壽險',
+                        data: [0, 95, 60, 85, 80],
+                        borderColor: '#f64f59',
+                        backgroundColor: 'rgba(246, 79, 89, 0.2)',
+                        pointRadius: 5
+                    },
+                    {
+                        label: '美利雙寶',
+                        data: [70, 78, 88, 75, 65],
+                        borderColor: '#6c5ce7',
+                        backgroundColor: 'rgba(108, 92, 231, 0.2)',
+                        pointRadius: 5
+                    },
+                    {
+                        label: '萬美利',
+                        data: [30, 85, 82, 90, 88],
+                        borderColor: '#00a8ff',
+                        backgroundColor: 'rgba(0, 168, 255, 0.2)',
+                        pointRadius: 5
+                    },
+                    {
+                        label: '美利康愛',
+                        data: [95, 70, 70, 65, 60],
+                        borderColor: '#4cd137',
+                        backgroundColor: 'rgba(76, 209, 55, 0.2)',
+                        pointRadius: 5
+                    },
+                    {
+                        label: '滿福寶',
+                        data: [80, 65, 40, 60, 50],
+                        borderColor: '#fbc531',
+                        backgroundColor: 'rgba(251, 197, 49, 0.2)',
+                        pointRadius: 5
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)',
+                            circular: true
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 财富增长曲线
+        new Chart(document.getElementById('growthCurve'), {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: 20 }, (_, i) => `${i + 1}年`),
+                datasets: [
+                    {
+                        label: '添額增福壽險',
+                        data: Array.from({ length: 20 }, (_, i) => 102 * (1.06) ** i),
+                        borderColor: '#f64f59',
+                        borderWidth: 3,
+                        tension: 0.3
+                    },
+                    {
+                        label: '美利雙寶',
+                        data: Array.from({ length: 20 }, (_, i) => 112 * (1.024) ** i + 5 * i),
+                        borderColor: '#6c5ce7',
+                        borderWidth: 3,
+                        tension: 0.3
+                    },
+                    {
+                        label: '萬美利',
+                        data: Array.from({ length: 20 }, (_, i) => 112 * (1.023) ** i + 3 * i),
+                        borderColor: '#00a8ff',
+                        borderWidth: 3,
+                        tension: 0.3
+                    },
+                    {
+                        label: '美利康愛',
+                        data: Array.from({ length: 20 }, (_, i) => 104.5 * (1.015) ** i + 10 * i),
+                        borderColor: '#4cd137',
+                        borderWidth: 3,
+                        tension: 0.3
+                    },
+                    {
+                        label: '滿福寶',
+                        data: Array.from({ length: 20 }, (_, i) => 103 * (1.004) ** i + 2 * i),
+                        borderColor: '#fbc531',
+                        borderWidth: 3,
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: '總價值 (萬元)',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 功能对比矩阵
+        new Chart(document.getElementById('bubbleMatrix'), {
+            type: 'bubble',
+            data: {
+                datasets: [
+                    {
+                        label: '添額增福壽險',
+                        data: [{ x: 40, y: 70, r: 20 }],
+                        backgroundColor: '#f64f59'
+                    },
+                    {
+                        label: '美利雙寶',
+                        data: [{ x: 75, y: 80, r: 25 }],
+                        backgroundColor: '#6c5ce7'
+                    },
+                    {
+                        label: '萬美利',
+                        data: [{ x: 85, y: 90, r: 30 }],
+                        backgroundColor: '#00a8ff'
+                    },
+                    {
+                        label: '美利康愛',
+                        data: [{ x: 90, y: 85, r: 35 }],
+                        backgroundColor: '#4cd137'
+                    },
+                    {
+                        label: '滿福寶',
+                        data: [{ x: 60, y: 65, r: 15 }],
+                        backgroundColor: '#fbc531'
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '功能丰富度',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: '保障强度',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 星级战力榜
+        new Chart(document.getElementById('starChart'), {
+            type: 'bar',
+            data: {
+                labels: ['添額增福壽險', '美利雙寶', '萬美利', '美利康愛', '滿福寶'],
+                datasets: [{
+                    label: '综合评分',
+                    data: [3.2, 4.5, 4.0, 4.8, 3.5],
+                    backgroundColor: [
+                        '#f64f59',
+                        '#6c5ce7',
+                        '#00a8ff',
+                        '#4cd137',
+                        '#fbc531'
+                    ]
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            title: (ctx) => `${ctx[0].label} 战力值`,
+                            label: (ctx) => `${ctx.raw} ★`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        max: 5,
+                        ticks: {
+                            callback: (value) => `${value} 星`,
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
